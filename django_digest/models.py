@@ -39,9 +39,9 @@ def _unconfirmed_logins(user):
     return _get_logins(user, 'unconfirmed_logins_for_user')
  
 def _store_partial_digests(user):
-    PartialDigest.objects.filter(user=user).delete()
     for (login, partial_digest, confirmed) in (
         _postponed_partial_digests[user.password]):
+        PartialDigest.objects.filter(user=user, login=login).delete()
         PartialDigest.objects.create(user=user, login=login, confirmed=confirmed,
                                      partial_digest=partial_digest)
 
